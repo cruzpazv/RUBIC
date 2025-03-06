@@ -424,7 +424,7 @@ height
   
 extension
 
-  : The extension of the output plots. Can be 'png' or 'eps'. By default, the figures will be 'png'.
+  : The extension of the output plots. Can be any type of device option of ggplot::ggsave(...). By default, the figures will be 'png'.
 
 _Details:_
 
