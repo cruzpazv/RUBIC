@@ -1,4 +1,5 @@
 importFrom(methods, setRefClass)
+importFrom(methods, new)
 
 importFrom(data.table, data.table)
 importFrom(data.table, foverlaps)
@@ -41,8 +42,12 @@ importFrom(ggplot2, ggplotGrob)
 importFrom(ggplot2, element_blank)
 importFrom(ggplot2, element_text)
 importFrom(ggplot2, element_line)
+importFrom(ggplot2, ggsave)
 
-importFrom(grDevices, cairo_ps)
+importFrom(grDevices, dev.off)
+importFrom(graphics, hist)
+importFrom(stats, median, setNames, var)
+importFrom(utils, URLencode, data, head, modifyList, tail)
 
 importFrom(grid, unit)
 importFrom(grid, grid.newpage)
@@ -50,7 +55,6 @@ importFrom(grid, grid.draw)
 
 importFrom(gtable, gtable_add_rows)
 importFrom(gtable, gtable_add_grob)
-
 
 export(read.seg.file)
 export(read.markers)
