@@ -1,4 +1,4 @@
-# RUBIC v1.0.2#
+# RUBIC v1.0.4#
 ## What is RUBIC? ##
 RUBIC is an R package.
 
@@ -394,7 +394,7 @@ _Details:_ This method call automatically [`call.focal.events`](#call-focal-even
 
 <a name="save-plots"></a>
 ```r
-save.plots(dir, genes = NULL, steps = T, width = 11, height = 5)
+save.plots(dir, genes = NULL, steps = T, width = 11, height = 5, extension = "png")
 ```
 Save gains and losses plots for each chromosome.
 
@@ -421,6 +421,10 @@ width
 height
 
   : The height of each plot in inches.
+  
+extension
+
+  : The extension of the output plots. Can be 'png' or 'eps'. By default, the figures will be 'png'.
 
 _Details:_
 

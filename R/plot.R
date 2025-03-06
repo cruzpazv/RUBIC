@@ -20,7 +20,7 @@
 #'
 #' @noRd
 amp.profile <- function(map.loc, amp.level) {
-    map.loc[,.(LogRatio=sum(LogRatio[LogRatio >= amp.level])), by=.(Probe, Chromosome, Position, AbsPosition)]
+  map.loc[,.(LogRatio=sum(LogRatio[LogRatio >= amp.level])), by=.(Probe, Chromosome, Position, AbsPosition)]
 }
 
 
@@ -59,13 +59,13 @@ segments.as.data.table <- function(map.loc.agr, segments, markers) {
     locs <- map.loc.agr[segment$I:(segment$I + segment$kw - 1),
                         c(.SD[c(1,NROW(.SD)),.(Chromosome, Position, AbsPosition)],
                           LogRatio=mean(LogRatio))]
-
+    
     loc.chr <- as.character(locs[1, Chromosome])
     loc.start <- locs[1, Position]
     loc.end <- locs[2, Position]
     loc.abs.start <- locs[1, AbsPosition]
     loc.abs.end <- locs[2, AbsPosition]
-
+    
     if (!is.null(markers)) {
       # If there are not marker found by the query a warning is displayed and
       # -/+ Inf is returned
@@ -97,7 +97,7 @@ segments.as.data.table <- function(map.loc.agr, segments, markers) {
       loc.abs.adj.start <- loc.abs.start
       loc.abs.adj.end <- loc.abs.end
     }
-
+    
     list(ID=segment$I, Chromosome=loc.chr,
          Start=loc.adj.start, End=loc.adj.end,
          StartAbs=loc.abs.adj.start, EndAbs=loc.abs.adj.end,
@@ -134,11 +134,11 @@ plot.genes.bar <- function(genes, min.x, max.x, focal.p=NULL, focal.n=NULL) {
   if (NROW(focal.p) > 0)
     plot <- plot + geom_rect(data=focal.p,
                              aes(xmin=Start, ymin=0, xmax=End, ymax=1),
-                             alpha=.7, size=NA, fill='red')
+                             alpha=.7, linewidth=NA, fill='red')
   if (NROW(focal.n) > 0)
     plot <- plot + geom_rect(data=focal.n,
                              aes(xmin=Start, ymin=0, xmax=End, ymax=1),
-                             alpha=.7, size=NA, fill='blue')
+                             alpha=.7, linewidth=NA, fill='blue')
   plot <- plot + geom_rect(aes(xmin=Start, xmax=End, ymin=0, ymax=1), fill='grey45') +
     labs(x = NULL, y = NULL) +
     scale_x_continuous(expand=c(0, 0), limits=c(min.x, max.x)) +
@@ -150,7 +150,7 @@ plot.genes.bar <- function(genes, min.x, max.x, focal.p=NULL, focal.n=NULL) {
           axis.title=element_blank(),
           axis.text=element_blank(),
           axis.ticks=element_blank(),
-          legend.text.align=0,
+          legend.text = element_text(hjust = 0),
           plot.margin=unit(c(0,0,0,0), "lines"))
   plot
 }
@@ -180,15 +180,15 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
                      segments.p=NULL, segments.n=NULL,
                      focal.p=NULL, focal.n=NULL,
                      genes=NULL, steps=T, chromosome=NULL, offset.table=NULL) {
-
+  
   min.x <- +Inf
   max.x <- -Inf
-
+  
   #TODO: if (is.null(chromosome))
   #      transform local coordinates in absolute
   #      and plot the whole genome
-
-
+  
+  
   if (NROW(amp.profile) > 0) {
     if (!is.null(chromosome)) {
       amp.profile <- amp.profile[Chromosome==chromosome]
@@ -196,7 +196,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, amp.profile[,min(Position)]))
     max.x <- suppressWarnings(max(max.x, amp.profile[,max(Position)]))
   }
-
+  
   if (NROW(del.profile) > 0) {
     if (!is.null(chromosome)) {
       del.profile <- del.profile[Chromosome==chromosome]
@@ -204,7 +204,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, del.profile[,min(Position)]))
     max.x <- suppressWarnings(max(max.x, del.profile[,max(Position)]))
   }
-
+  
   if (NROW(segments.p) > 0) {
     if (!is.null(chromosome)) {
       segments.p <- segments.p[Chromosome==chromosome]
@@ -212,7 +212,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, segments.p[,min(Start)]))
     max.x <- suppressWarnings(max(max.x, segments.p[,max(End)]))
   }
-
+  
   if (NROW(segments.n) > 0) {
     if (!is.null(chromosome)) {
       segments.n <- segments.n[Chromosome==chromosome]
@@ -220,7 +220,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, segments.n[,min(Start)]))
     max.x <- suppressWarnings(max(max.x, segments.n[,max(End)]))
   }
-
+  
   if (NROW(focal.p) > 0) {
     if (!is.null(chromosome)) {
       focal.p <- focal.p[Chromosome==chromosome]
@@ -228,7 +228,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, focal.p[,min(Start)]))
     max.x <- suppressWarnings(max(max.x, focal.p[,max(End)]))
   }
-
+  
   if (NROW(focal.n) > 0) {
     if (!is.null(chromosome)) {
       focal.n <- focal.n[Chromosome==chromosome]
@@ -236,10 +236,10 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, focal.n[,min(Start)]))
     max.x <- suppressWarnings(max(max.x, focal.n[,max(End)]))
   }
-
+  
   if (is.infinite(min.x) || is.infinite(max.x))
     stop('There is no data to plot.')
-
+  
   if (NROW(genes) > 0) {
     if (!is.null(chromosome)) {
       genes <- genes[Chromosome==chromosome]
@@ -247,11 +247,11 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     min.x <- suppressWarnings(min(min.x, genes[,min(Start)]))
     max.x <- suppressWarnings(max(max.x, genes[,max(End)]))
   }
-
+  
   if (NROW(genes) > 0) {
     top.plot <- plot.genes.bar(genes, min.x, max.x, focal.p, focal.n)
   }
-
+  
   if (is.null(chromosome)){ 
     if(!is.null(amp.profile) && !is.null(del.profile)) {
       if (NROW(amp.profile) > 0) {
@@ -299,31 +299,31 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
         
       }
     }  
- 
+    
   }
   
   main.plot <- ggplot(NULL, aes(x=Position, y=LogRatio))
-
+  
   if(NROW(amp.profile) > 0)
     main.plot <- main.plot + geom_point(data=amp.profile, color='#d6a9a9')
   if(NROW(del.profile))
     main.plot <- main.plot + geom_point(data=del.profile, color='#a9a9d6')
-
+  
   if ((NROW(del.profile) == 0 && NROW(segments.n) == 0 && NROW(focal.n) == 0) ||
-       (NROW(amp.profile) == 0 && NROW(segments.p) == 0 && NROW(focal.p) == 0)) {
+      (NROW(amp.profile) == 0 && NROW(segments.p) == 0 && NROW(focal.p) == 0)) {
     rect.min.y <- 0
     rect.max.y <- +Inf
     if (NROW(amp.profile) == 0) {
       main.plot <- main.plot + scale_y_reverse(name='Aggregate log ratios')
     }
-
+    
   } else {
     main.plot <- main.plot + geom_hline(aes(yintercept=0), size=.2, color='grey', linetype="dashed") +
       scale_y_continuous(name='Aggregate log ratios')
     rect.min.y <- -Inf
     rect.max.y <- +Inf
   }
-
+  
   if(NROW(focal.p) > 0)
     main.plot <- main.plot + geom_rect(data=focal.p, aes(xmin=Start, xmax=End), ymin=rect.min.y, ymax=rect.max.y, alpha=.2, size=NA, fill='red', inherit.aes=F)
   if(NROW(focal.n) > 0)
@@ -358,7 +358,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
       main.plot <- main.plot + geom_segment(data=segments.n, aes(x=Start, y=Mu, xend=End, yend=Mu), size=.6, color='blue')
     }
   }
-
+  
   if (is.null(chromosome)) {
     main.plot <- main.plot + geom_vline(xintercept=offset.table[,max][-c(1)])
   }  
@@ -370,19 +370,17 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
           axis.text=element_text(color='black'),
           axis.ticks=element_line(color='black'),
           axis.title.x=element_blank()
-          )
+    )
   
   main.grob <- ggplotGrob(main.plot)
-
+  
   if (NROW(genes) > 0) {
-
+    
     top.grob <- ggplotGrob(top.plot)
     main.grob <- gtable_add_rows(main.grob, unit(.025, "npc"), 1)
     main.grob <- gtable_add_grob(main.grob, top.grob$grobs[[which(top.grob$layout$name == "panel")]], 2, 4, 2, 4)
   }
-  # FIXME: The current version of ggplot on CRAN (1.0.1) don't support
-  #        yet the possibility to use ggsave to save grobs,
-  #        therefore we need to display it.
+  
   grid.newpage()
   grid.draw(main.grob)
 }
@@ -406,14 +404,14 @@ plot.cna.chromosome <- function(chromosome, amp.profile=NULL, del.profile=NULL,
 }
 
 
-generate.all.plots.eps <- function(dir,
-                                   map.loc, amp.level, del.level,
-                                   segments.p, segments.n,
-                                   focal.p.events, focal.n.events,
-                                   markers, steps=T, genes=NULL,
-                                   width=11, height=5) {
-
-  dir.create(dir)
+generate.all.plots <- function(dir,
+                               map.loc, amp.level, del.level,
+                               segments.p, segments.n,
+                               focal.p.events, focal.n.events,
+                               markers, steps=T, genes=NULL,
+                               width=11, height=5, extension=NULL) {
+  
+  if(!file.exists(dir)) dir.create(dir)
   
   a.prof <- amp.profile(map.loc, amp.level)
   d.prof <- del.profile(map.loc, del.level)
@@ -421,30 +419,36 @@ generate.all.plots.eps <- function(dir,
   focal.n <- focal.events.as.data.table(focal.n.events)
   segs.p <- segments.as.data.table(a.prof, segments.p, markers)
   segs.n <- segments.as.data.table(d.prof, segments.n, markers)
-
-  extension <- 'eps'
-
-  setEPS()
+  
+  if(is.null(extension)){
+    extension <- 'png'
+  }else{
+    extension <- extension
+    if (!extension %in% c("eps", "png", "ps", "tex", "pdf", "jpeg", "tiff", "bmp", "svg")) {
+      stop(paste('The plots extension can only be "eps", "png", "ps", "tex", "pdf", "jpeg", "tiff", "bmp" or "svg". (Check device options in ggplot2::ggsave(...)).'))
+    }
+  }
+  
   for (chromosome in levels(map.loc[,Chromosome])) {
     a.file.name <- file.path(dir, paste0('chromosome_', chromosome, '_all.', extension))
     p.file.name <- file.path(dir, paste0('chromosome_', chromosome, '_gains.', extension))
     n.file.name <- file.path(dir, paste0('chromosome_', chromosome, '_losses.', extension))
-
-    cairo_ps(a.file.name, width=width, height=height)
+    
+    ggplot2::ggsave(a.file.name, width=width, height=height, device = extension)
     plot.cna(amp.profile=a.prof, del.profile=d.prof,
              segments.p=segs.p, segments.n=segs.n,
              focal.p=focal.p, focal.n=focal.n,
              genes=genes, steps=steps, chromosome=chromosome)
     dev.off()
-
-    cairo_ps(p.file.name, width=width, height=height)
+    
+    ggplot2::ggsave(p.file.name, width=width, height=height, device = extension)
     plot.cna(amp.profile=a.prof,
              segments.p=segs.p,
              focal.p=focal.p,
              genes=genes, steps=steps, chromosome=chromosome)
     dev.off()
-
-    cairo_ps(n.file.name, width=width, height=height)
+    
+    ggplot2::ggsave(n.file.name, width=width, height=height, device = extension)
     plot.cna(del.profile=d.prof,
              segments.n=segs.n,
              focal.n=focal.n,
@@ -456,29 +460,28 @@ generate.all.plots.eps <- function(dir,
   offset.table[, max:=c(0,max[0:(length(max)-1)])]
   offset.table[,max := cumsum(max)]
   
-  a.file.name <- file.path(dir, paste0('chromosome_all_all.', extension))  
-  p.file.name <- file.path(dir, paste0('chromosome_all_gains.', extension))
-  n.file.name <- file.path(dir, paste0('chromosome_all_losses.', extension))
+  a.file.name <- file.path(dir, paste0('chromosome_all_losses.', extension))  
+  p.file.name <- file.path(dir, paste0('chromosome_all_all.', extension))
+  n.file.name <- file.path(dir, paste0('chromosome_all_gains.', extension))
   
-  cairo_ps(a.file.name, width=width, height=height)
+  ggplot2::ggsave(a.file.name, width=width, height=height, device = extension)
   plot.cna(amp.profile=a.prof, del.profile=d.prof,
            segments.p=segs.p, segments.n=segs.n,
            focal.p=focal.p, focal.n=focal.n,
            genes=NULL, steps=steps, offset.table=offset.table) # genes NULL so always whole genome
   dev.off()
   
-  cairo_ps(p.file.name, width=width, height=height)
+  ggplot2::ggsave(p.file.name, width=width, height=height, device = extension)
   plot.cna(amp.profile=a.prof,
            segments.p=segs.p,
            focal.p=focal.p,
            genes=NULL, steps=steps, offset.table=offset.table) # genes NULL so always whole genome
   dev.off()     
   
-  cairo_ps(n.file.name, width=width, height=height)
+  ggplot2::ggsave(n.file.name, width=width, height=height, device = extension)
   plot.cna(del.profile=d.prof,
            segments.n=segs.n,
            focal.n=focal.n,
            genes=NULL, steps=steps, offset.table=offset.table) # genes NULL so always whole genome
-  dev.off()  
-  
+  dev.off()
 }

@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-seg.cna.columns <- c('Sample', 'Chromosome', 'Start', 'End', 'LogRatio')
-markers.columns <- c('Name', 'Chromosome', 'Position')
-genes.columns <- c('ID', 'Name', 'Chromosome', 'Start', 'End')
+seg.cna.columns <- c("Sample", "Chromosome", "Start", "End", "LogRatio")
+markers.columns <- c("Name", "Chromosome", "Position")
+genes.columns <- c("ID", "Name", "Chromosome", "Start", "End")
 
 # The following is necessary to silence warning for CMD CHECK on variable defined
 # in inner scopes of data.table and ggplot2
@@ -93,7 +93,7 @@ RUBIC <- setRefClass('RUBIC',
              See \\link{rubic} for parameter descriptions."
              
              errors <- vector('character')
-             
+            
              if (amp.level <= 0)
                errors <- c(errors, "The threshold for calling amplifications must be > 0")
              if (del.level >= 0)
@@ -118,7 +118,6 @@ RUBIC <- setRefClass('RUBIC',
              focal.threshold <<- focal.threshold
              min.probes <<- min.probes
              fdr <<- as.numeric(fdr)
-             
              
              if (!is.null(seg.cna)) {
                # If seg.cna is a string then read the file
@@ -394,7 +393,7 @@ RUBIC <- setRefClass('RUBIC',
              focal.events.to.tsv(focal.n.events, file)
            },
            
-           save.plots = function(dir, genes=NULL, steps=T, width=11, height=5) {
+           save.plots = function(dir, genes=NULL, steps=T, width=11, height=5, extension = "png") {
              "Save gains and losses plots for each chromosome."
              
              if (length(q.all) == 0) {
@@ -425,17 +424,23 @@ RUBIC <- setRefClass('RUBIC',
              }
              
              if (NROW(custom.genes) == 0) {
-               generate.all.plots.eps(dir, map.loc, amp.level, del.level,
-                                      segments.p, segments.n,
-                                      focal.p.events, focal.n.events,
-                                      markers, steps=steps, genes=.self$genes,
-                                      width=width, height=height)
+               generate.all.plots(dir=dir, map.loc=map.loc, amp.level=amp.level, del.level=del.level,
+                                  segments.p=segments.p, segments.n=segments.n,
+                                  focal.p.events=focal.p.events, focal.n.events=focal.n.events,
+                                  markers=markers, steps=steps, genes=genes,
+                                  width=width, height=height, extension=extension)
+               
+               generate.all.plots(dir=dir, map.loc=map.loc, amp.level=amp.level, del.level=del.level,
+                                  segments.p=rbc$segments.p, segments.n=rbc$segments.n,
+                                  focal.p.events=rbc$focal.p.events, focal.n.events=rbc$focal.n.events,
+                                  markers=markers, steps=steps, genes=genes,
+                                  width=width, height=height, extension=extension)
              } else {
-               generate.all.plots.eps(dir, map.loc, amp.level, del.level,
-                                      segments.p, segments.n,
-                                      focal.p.events, focal.n.events,
-                                      markers, steps=steps, genes=custom.genes,
-                                      width=width, height=height)
+               generate.all.plots(dir=dir, map.loc=map.loc, amp.level=amp.level, del.level=del.level,
+                                  segments.p=segments.p, segments.n=segments.n,
+                                  focal.p.events=focal.p.events, focal.n.events=focal.n.events,
+                                  markers=markers, steps=steps, genes=custom.genes,
+                                  width=width, height=height, extension=extension)
              }
            }
            
@@ -505,6 +510,7 @@ rubic <- function(fdr, seg.cna, markers,
                   col.sample=1, col.chromosome=2, col.start=3,
                   col.end=4, col.log.ratio=6,
                   ...) {
+  
   error <- character(0)
   if (missing(fdr)) {
     error <- c(error, 'fdr')
