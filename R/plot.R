@@ -15,8 +15,8 @@
 
 #' Return the aggregate profile of amplifications.
 #'
-#' @param map.loc
-#' @param amp.level
+#' @param map.loc UNDER CONSTRUCTION 
+#' @param amp.level UNDER CONSTRUCTION 
 #'
 #' @noRd
 amp.profile <- function(map.loc, amp.level) {
@@ -26,8 +26,8 @@ amp.profile <- function(map.loc, amp.level) {
 
 #' Return the aggregate profile of deletions.
 #'
-#' @param map.loc
-#' @param del.level
+#' @param map.loc UNDER CONSTRUCTION 
+#' @param del.level UNDER CONSTRUCTION 
 #'
 #' @noRd
 del.profile <- function(map.loc, del.level) {
@@ -45,10 +45,10 @@ focal.events.as.data.table <- function(focal.events) {
 
 #' Transforms the list of segments in a data.table.
 #'
-#' @param map.loc.agr
-#' @param segments
-#' @param focal.events
-#' @param markers
+#' @param map.loc.agr UNDER CONSTRUCTION 
+#' @param segments UNDER CONSTRUCTION 
+#' @param focal.events UNDER CONSTRUCTION 
+#' @param markers UNDER CONSTRUCTION 
 #'
 #' @return A \code{data.table} containing segment information and whether they are
 #'         a focal event.

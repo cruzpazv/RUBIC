@@ -393,7 +393,7 @@ RUBIC <- setRefClass('RUBIC',
              focal.events.to.tsv(focal.n.events, file)
            },
            
-           save.plots = function(dir, genes=NULL, steps=T, width=11, height=5, extension = "png") {
+           save.plots = function(dir, genes=NULL, steps=T, width=11, height=5, extension="png") {
              "Save gains and losses plots for each chromosome."
              
              if (length(q.all) == 0) {
@@ -427,12 +427,6 @@ RUBIC <- setRefClass('RUBIC',
                generate.all.plots(dir=dir, map.loc=map.loc, amp.level=amp.level, del.level=del.level,
                                   segments.p=segments.p, segments.n=segments.n,
                                   focal.p.events=focal.p.events, focal.n.events=focal.n.events,
-                                  markers=markers, steps=steps, genes=genes,
-                                  width=width, height=height, extension=extension)
-               
-               generate.all.plots(dir=dir, map.loc=map.loc, amp.level=amp.level, del.level=del.level,
-                                  segments.p=rbc$segments.p, segments.n=rbc$segments.n,
-                                  focal.p.events=rbc$focal.p.events, focal.n.events=rbc$focal.n.events,
                                   markers=markers, steps=steps, genes=genes,
                                   width=width, height=height, extension=extension)
              } else {

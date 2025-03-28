@@ -25,6 +25,7 @@ Imports: data.table (>= 1.9.4),
   methods
 Suggests: testthat, R.matlab
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 7.3.2
 NeedsCompilation: no
+Encoding: UTF-8
 Packaged: 2015-11-26 15:34:37 UTC; Nicola
