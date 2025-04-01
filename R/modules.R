@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+#' @noRd
 sort.modules <- function(modules, chromosomes) {
   num.mod <- length(modules)
   starts <- rep(0, num.mod)
@@ -381,7 +381,7 @@ updated.adj.sigs <- function(cna.matrix, modules, merge.i, break.info, break.ps,
   list(break.info=break.info, break.ps=break.ps)
 }
 
-
+#' @export
 merge.adj.modules <- function(cna.matrix, modules, merge.i, break.info, break.ps, params) {
   module.l <- modules[[merge.i]]
   module.r <- modules[[merge.i+1]]

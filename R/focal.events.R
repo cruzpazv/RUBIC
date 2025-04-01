@@ -268,7 +268,11 @@ calc.break.qvalues <- function(focal.p.events,  focal.n.events) {
        q.all=q.all)
 }
 
-
+#' Sort focal events by genomic position
+#'
+#' @param focal.events List of focal events to be sorted
+#' @return Sorted list of focal events
+#' @exportS3Method
 sort.regions.on.genome <- function(focal.events) {
   focal.events[order(sapply(focal.events, function(x) x$I))]
 }

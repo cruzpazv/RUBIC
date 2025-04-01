@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+#' @export
 min.kw.peak.index <- function(segments, t.sign, min.kw.peak=1e10) {
   num.segs <- length(segments)
   if (!is.element('l', names(segments[[1]]))) {

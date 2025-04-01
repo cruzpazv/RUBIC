@@ -86,7 +86,7 @@ gen.perm.profiles <- function(cna.matrix, num.iter, test.env=NULL) {
 #' @param p.num The number of probes per sample
 #' 
 #' @return Returns a list containing various parameters to be inserted in the \code{per.sample} matrix
-#' @noRd UNDER CONSTRUCTION 
+#' @noRd 
 ###
 # MATLAB MAPPING INFO
 # matrix = params.agrCumIter as returned by genPermProfiles
@@ -190,7 +190,7 @@ extract.parameter.at.kws <- function(per.sample, kw.i, kw.j, p.s) {
   list(mu=lr.s.mu, var=lr.s.var, int.sqrt.v=int.sqrt.v)
 }
 
-
+#' @export
 all.samp.param.estimation <- function(kws, per.sample, p.num, min.var=1e-5) {
   num.kws <- length(kws)
   num.kws.half <- sum(kws <= max(kws)/2)
@@ -330,7 +330,7 @@ compute.gauss.kernel <- function(num.stds, kw) {
   g.k
 }
 
-
+#' @export
 max.mode <- function(profile, filter.std) {
   if (filter.std == 0) {
     return(list(x=0, y.orig=0, z=0, peak=0))
@@ -503,6 +503,7 @@ segs.to.cna.matrix <- function(seg.matrix, segments, p.num) {
 ###
 # MATLAB MAPPING
 # Generates random permutations inside.
+#' @noRd
 update.abs.cna <- function(data.cna.matrix, amp.level, del.level,
                            seg.matrix, cna.matrix,
                            cna.matrix.p.agr, cna.matrix.n.agr,

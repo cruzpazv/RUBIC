@@ -385,7 +385,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
   grid.draw(main.grob)
 }
 
-
+#' @export
 plot.cna.chromosome <- function(chromosome, amp.profile=NULL, del.profile=NULL,
                                 segments.p=NULL, segments.n=NULL,
                                 focal.p=NULL, focal.n=NULL,
