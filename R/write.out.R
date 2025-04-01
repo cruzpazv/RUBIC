@@ -24,6 +24,8 @@ focal.events.to.tsv <- function(focal.events, file.name='') {
     paste(
       event$chromosome, event$loc.start, event$loc.end,
       formatC(percentile_p, format = "e", digits = 5),
+      formatC(event$l$p, format="e", digits=5),
+      formatC(event$r$p, format="e", digits=5),
       formatC(event$l$q, format="e", digits=5),
       formatC(event$r$q, format="e", digits=5),
       paste0(event$gene.symbols, collapse=","),
@@ -31,6 +33,7 @@ focal.events.to.tsv <- function(focal.events, file.name='') {
     )
   }, character(1))
   lines <- c(paste('Chromosome', 'Start', 'End', 'Percentile_pValue',
+                   'Left break (pValue)', 'Right break (pValue)',
                    'Left break (-log10(qValue))', 'Right break (-log10(qValue))', 
                    'Gene symb', sep='\t'),
              lines)
