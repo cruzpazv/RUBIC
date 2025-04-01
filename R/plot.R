@@ -238,7 +238,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
   }
   
   if (is.infinite(min.x) || is.infinite(max.x))
-    stop('There is no data to plot or there are infinite values.')
+    stop('There is no data to plot.')
   
   if (NROW(genes) > 0) {
     if (!is.null(chromosome)) {
@@ -413,99 +413,75 @@ generate.all.plots <- function(dir,
   
   if(!file.exists(dir)) dir.create(dir)
   
-  # Process profiles separately for gains and losses
   a.prof <- amp.profile(map.loc, amp.level)
   d.prof <- del.profile(map.loc, del.level)
-  
-  # Create data.tables for segments and focal events
   focal.p <- focal.events.as.data.table(focal.p.events)
   focal.n <- focal.events.as.data.table(focal.n.events)
   segs.p <- segments.as.data.table(a.prof, segments.p, markers)
   segs.n <- segments.as.data.table(d.prof, segments.n, markers)
   
-  # Set default extension if not provided
-  if (is.null(extension)) extension <- "png"
-  
-  # Validate extension
-  valid_ext <- c("eps", "png", "ps", "tex", "pdf", "jpeg", "tiff", "bmp", "svg")
-  if (!extension %in% valid_ext) {
-    stop('Invalid extension. Choose from: ', paste(valid_ext, collapse = ", "))
+  if(is.null(extension)){
+    extension <- 'png'
+  }else{
+    extension <- extension
+    if (!extension %in% c("eps", "png", "ps", "tex", "pdf", "jpeg", "tiff", "bmp", "svg")) {
+      stop(paste('The plots extension can only be "eps", "png", "ps", "tex", "pdf", "jpeg", "tiff", "bmp" or "svg". (Check device options in ggplot2::ggsave(...)).'))
+    }
   }
   
-  # Generate chromosome-specific plots
-  for (chromosome in levels(map.loc$Chromosome)) {
-    # ALL EVENTS plot
-    all_file <- file.path(dir, paste0('chromosome_', chromosome, '_all.', extension))
-    png(all_file, width = width, height = height, units = "in", res = 300)
-    plot.cna(amp.profile = a.prof[Chromosome == chromosome],
-             del.profile = d.prof[Chromosome == chromosome],
-             segments.p = segs.p[Chromosome == chromosome],
-             segments.n = segs.n[Chromosome == chromosome],
-             focal.p = focal.p[Chromosome == chromosome],
-             focal.n = focal.n[Chromosome == chromosome],
-             genes = genes[Chromosome == chromosome],
-             steps = steps,
-             chromosome = chromosome)
+  for (chromosome in levels(map.loc[,Chromosome])) {
+    a.file.name <- file.path(dir, paste0('chromosome_', chromosome, '_all.', extension))
+    p.file.name <- file.path(dir, paste0('chromosome_', chromosome, '_gains.', extension))
+    n.file.name <- file.path(dir, paste0('chromosome_', chromosome, '_losses.', extension))
+    
+    ggplot2::ggsave(a.file.name, width=width, height=height, device = extension)
+    plot.cna(amp.profile=a.prof, del.profile=d.prof,
+             segments.p=segs.p, segments.n=segs.n,
+             focal.p=focal.p, focal.n=focal.n,
+             genes=genes, steps=steps, chromosome=chromosome)
     dev.off()
     
-    # GAINS ONLY plot
-    gains_file <- file.path(dir, paste0('chromosome_', chromosome, '_gains.', extension))
-    png(gains_file, width = width, height = height, units = "in", res = 300)
-    plot.cna(amp.profile = a.prof[Chromosome == chromosome],
-             segments.p = segs.p[Chromosome == chromosome],
-             focal.p = focal.p[Chromosome == chromosome],
-             genes = genes[Chromosome == chromosome],
-             steps = steps,
-             chromosome = chromosome)
+    ggplot2::ggsave(p.file.name, width=width, height=height, device = extension)
+    plot.cna(amp.profile=a.prof,
+             segments.p=segs.p,
+             focal.p=focal.p,
+             genes=genes, steps=steps, chromosome=chromosome)
     dev.off()
     
-    # LOSSES ONLY plot
-    losses_file <- file.path(dir, paste0('chromosome_', chromosome, '_losses.', extension))
-    png(losses_file, width = width, height = height, units = "in", res = 300)
-    plot.cna(del.profile = d.prof[Chromosome == chromosome],
-             segments.n = segs.n[Chromosome == chromosome],
-             focal.n = focal.n[Chromosome == chromosome],
-             genes = genes[Chromosome == chromosome],
-             steps = steps,
-             chromosome = chromosome)
+    ggplot2::ggsave(n.file.name, width=width, height=height, device = extension)
+    plot.cna(del.profile=d.prof,
+             segments.n=segs.n,
+             focal.n=focal.n,
+             genes=genes, steps=steps, chromosome=chromosome)
     dev.off()
   }
   
-  # Generate whole-genome plots
-  offset.table <- markers[, .(max = max(Position)), by = Chromosome]
-  offset.table[, max := c(0, max[1:(.N - 1)])]
-  offset.table[, max := cumsum(max)]
+  offset.table <- markers[, .(max=max(Position)), by=Chromosome]
+  offset.table[, max:=c(0,max[0:(length(max)-1)])]
+  offset.table[,max := cumsum(max)]
   
-  # Whole genome ALL
-  all_file <- file.path(dir, paste0('genome_all.', extension))
-  png(all_file, width = width, height = height, units = "in", res = 300)
-  plot.cna(amp.profile = a.prof,
-           del.profile = d.prof,
-           segments.p = segs.p,
-           segments.n = segs.n,
-           focal.p = focal.p,
-           focal.n = focal.n,
-           steps = steps,
-           offset.table = offset.table)
+  a.file.name <- file.path(dir, paste0('chromosome_all_losses.', extension))  
+  p.file.name <- file.path(dir, paste0('chromosome_all_all.', extension))
+  n.file.name <- file.path(dir, paste0('chromosome_all_gains.', extension))
+  
+  ggplot2::ggsave(a.file.name, width=width, height=height, device = extension)
+  plot.cna(amp.profile=a.prof, del.profile=d.prof,
+           segments.p=segs.p, segments.n=segs.n,
+           focal.p=focal.p, focal.n=focal.n,
+           genes=NULL, steps=steps, offset.table=offset.table) # genes NULL so always whole genome
   dev.off()
   
-  # Whole genome GAINS
-  gains_file <- file.path(dir, paste0('genome_gains.', extension))
-  png(gains_file, width = width, height = height, units = "in", res = 300)
-  plot.cna(amp.profile = a.prof,
-           segments.p = segs.p,
-           focal.p = focal.p,
-           steps = steps,
-           offset.table = offset.table)
-  dev.off()
+  ggplot2::ggsave(p.file.name, width=width, height=height, device = extension)
+  plot.cna(amp.profile=a.prof,
+           segments.p=segs.p,
+           focal.p=focal.p,
+           genes=NULL, steps=steps, offset.table=offset.table) # genes NULL so always whole genome
+  dev.off()     
   
-  # Whole genome LOSSES
-  losses_file <- file.path(dir, paste0('genome_losses.', extension))
-  png(losses_file, width = width, height = height, units = "in", res = 300)
-  plot.cna(del.profile = d.prof,
-           segments.n = segs.n,
-           focal.n = focal.n,
-           steps = steps,
-           offset.table = offset.table)
+  ggplot2::ggsave(n.file.name, width=width, height=height, device = extension)
+  plot.cna(del.profile=d.prof,
+           segments.n=segs.n,
+           focal.n=focal.n,
+           genes=NULL, steps=steps, offset.table=offset.table) # genes NULL so always whole genome
   dev.off()
 }
