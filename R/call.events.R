@@ -85,7 +85,7 @@ is.peak.valid <- function(p.num, agr.cum.iter, segments, min.kw.peak.i, cna.agr,
     peak.valid <- TRUE
   } 
   
-  list(peak.valid=peak.valid, sig.info=sig.info)
+  list(peak.valid=peak.valid, sig.info=sig.info, perc=perc)
 }
 
 broadest.adj <- function(focal.events, seg.loc, type) {
@@ -247,10 +247,12 @@ call.events <- function(cna.matrix, amp.level, del.level,
     }
     peak.valid <- peak.valid.results$peak.valid
     sig.info <- peak.valid.results$sig.info
+    perc <- peak.valid.results$perc
     
     if (peak.valid){
       segments[[min.kw.peak.i]]$amp <- sig.info$amp 
       segments[[min.kw.peak.i]]$p <- sig.info$p
+      segments[[min.kw.peak.i]]$perc <- perc
       segments[[min.kw.peak.i]] <- adjust.boundaries(focal.events, segments[[min.kw.peak.i]])
       if (isempty(focal.events)) {
         focal.events <- list(segments[[min.kw.peak.i]])

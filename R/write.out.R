@@ -20,16 +20,19 @@ focal.events.to.tsv <- function(focal.events, file.name='') {
   
   fd <- file(file.name, "wb")
   lines <- vapply(focal.events, function(event) {
-    paste(event$chromosome, event$loc.start, event$loc.end,
-          formatC(event$l$p, format="e", digits=5),
-          formatC(event$r$p, format="e", digits=5),
-          formatC(event$l$q, format="e", digits=5),
-          formatC(event$r$q, format="e", digits=5),
-          paste0(event$gene.symbols, collapse=","), sep='\t')
+    percentile_p <- if(is.null(event$perc)) NA else event$perc
+    paste(
+      event$chromosome, event$loc.start, event$loc.end,
+      formatC(percentile_p, format = "e", digits = 5),
+      formatC(event$l$q, format="e", digits=5),
+      formatC(event$r$q, format="e", digits=5),
+      paste0(event$gene.symbols, collapse=","),
+      sep='\t'
+    )
   }, character(1))
-  lines <- c(paste('Chromosome', 'Start', 'End',  'Left break (pValue)',
-                   'Right break (pValues)', 'Left break (-log10(qValue))',
-                   'Right break (-log10(qValue))', 'Gene symb', sep='\t'),
+  lines <- c(paste('Chromosome', 'Start', 'End', 'Percentile_pValue',
+                   'Left break (-log10(qValue))', 'Right break (-log10(qValue))', 
+                   'Gene symb', sep='\t'),
              lines)
   writeLines(lines, con=fd, sep='\n')
   flush(fd)
