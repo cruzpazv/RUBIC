@@ -15,4 +15,3 @@ The \code{data.table} containing the genome annotations.
 \description{
 Import Biomart annotations from the web service.
 }
-

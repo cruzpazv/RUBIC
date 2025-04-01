@@ -4,10 +4,12 @@
 \name{samples}
 \alias{samples}
 \title{Samples names}
-\format{\code{\link[data.table]{data.table}} with 1 column
+\format{
+\code{\link[data.table]{data.table}} with 1 column:
 \describe{
 \item{V1}{Sample name}
-}}
+}
+}
 \usage{
 samples
 }
@@ -19,4 +21,3 @@ the RUBIC example.
   samples
 }
 \keyword{datasets}
-

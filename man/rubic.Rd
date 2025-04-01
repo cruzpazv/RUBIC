@@ -4,20 +4,37 @@
 \alias{rubic}
 \title{Create a new RUBIC object}
 \usage{
-rubic(fdr, seg.cna, markers, samples = NULL, genes = NULL,
-  amp.level = 0.1, del.level = -0.1, min.seg.markers = 1,
-  min.mean = NA_real_, max.mean = NA_real_, min.probes = 260000,
-  focal.threshold = 1e+07, seg.cna.header = T, markers.header = T,
-  samples.header = F, col.sample = 1, col.chromosome = 2, col.start = 3,
-  col.end = 4, col.log.ratio = 6, ...)
+rubic(
+  fdr,
+  seg.cna,
+  markers,
+  samples = NULL,
+  genes = NULL,
+  amp.level = 0.1,
+  del.level = -0.1,
+  min.seg.markers = 1,
+  min.mean = NA_real_,
+  max.mean = NA_real_,
+  min.probes = 260000,
+  focal.threshold = 1e+07,
+  seg.cna.header = T,
+  markers.header = T,
+  samples.header = F,
+  col.sample = 1,
+  col.chromosome = 2,
+  col.start = 3,
+  col.end = 4,
+  col.log.ratio = 6,
+  ...
+)
 }
 \arguments{
-\item{fdr}{A number indicating the wanted event based false descovery rate. For example 0.25.}
+\item{fdr}{A number indicating the wanted event based false discovery rate. For example 0.25.}
 
 \item{seg.cna}{Either a character string naming a file or a \code{\link[data.table]{data.table}} containing the segmented CNA data in appropriate format.
 In case a file name is provided the file will be open and read as a \code{\link[data.table]{data.table}}.}
 
-\item{markers}{Either a character string naming a file or a \code{\link[data.table]{data.table}} containing the markers informations in appropriate format.
+\item{markers}{Either a character string naming a file or a \code{\link[data.table]{data.table}} containing the markers information in appropriate format.
 In case a file name is provided the file will be opened and read as a \code{\link[data.table]{data.table}}.}
 
 \item{samples}{Either a character string naming a file or a character vector containing the sample IDs used for the analysis.
@@ -53,23 +70,23 @@ The default is set to \code{TRUE}.}
 
 \item{samples.header}{A logical value indicating whether the samples file contains the names of the variables as its first line.
 Please notice that while the default value of \code{seg.cna.header} and \code{markers.header} is set to \code{TRUE},
-RUBIC \emph{do not} expect an header by default for the samples file (and therefore this value is set
+RUBIC \emph{do not} expect a header by default for the samples file (and, therefore, this value is set
 by default to \code{FALSE}).}
 
-\item{col.sample}{The number of the column contaning the sample name in the \code{seg.cna} file.
-By default RUBIC expect the sample name to be in the 1st column.}
+\item{col.sample}{The number of the column containing the sample name in the \code{seg.cna} file.
+By default, RUBIC expects the sample name to be in the 1st column.}
 
-\item{col.chromosome}{The number of the column contaning the chromosome name in the \code{seg.cna} file.
-By default RUBIC expect the chromosome name to be in the 2nd column.}
+\item{col.chromosome}{The number of the column containing the chromosome name in the \code{seg.cna} file.
+By default, RUBIC expects the chromosome name to be in the 2nd column.}
 
-\item{col.start}{The number of the column contaning the start position of each segment in the \code{seg.cna} file.
-By default RUBIC expect the start position to be in the 3rd column.}
+\item{col.start}{The number of the column containing the start position of each segment in the \code{seg.cna} file.
+By default, RUBIC expects the start position to be in the 3rd column.}
 
-\item{col.end}{The number of the column contaning the end position of each segment in the \code{seg.cna} file.
-By default RUBIC expect the the end position to be in the 4th column.}
+\item{col.end}{The number of the column containing the end position of each segment in the \code{seg.cna} file.
+By default, RUBIC expects the end position to be in the 4th column.}
 
-\item{col.log.ratio}{The number of the column contaning the log.ratio name in the \code{seg.cna} file.
-By default RUBIC expect the log.ratio to be in the 6th column.}
+\item{col.log.ratio}{The number of the column containing the log.ratio name in the \code{seg.cna} file.
+By default, RUBIC expects the log.ratio to be in the 6th column.}
 
 \item{...}{Additional arguments to be passed to the constructor. Reserved for future use.}
 }
@@ -77,15 +94,14 @@ By default RUBIC expect the log.ratio to be in the 6th column.}
 A new RUBIC object.
 }
 \description{
-With this function it is possibile to create and initialize a new RUBIC object.
+With this function it is possible to create and initialize a new RUBIC object.
 }
 \details{
 In order to use the RUBIC method it is necessary to create e initialize a new RUBIC object
-         using data and parameters specific to your analysis. This function reads and preprocess all
-         the data and returns an object of the \code{\link[=RUBIC-class]{RUBIC}} class. It is possibile to start the analysis
+         using data and parameters specific to your analysis. This function reads and preprocesses all
+         the data and returns an object of the \code{\link[=RUBIC-class]{RUBIC}} class. It is possible to start the analysis
          using the method \code{estimate.parameters} or any other method of the \code{\link[=RUBIC-class]{RUBIC}} class.
 }
 \seealso{
 \code{\link{RUBIC-class}}
 }
-

@@ -4,14 +4,16 @@
 \name{seg.cna}
 \alias{seg.cna}
 \title{Segmented CNA}
-\format{\code{\link[data.table]{data.table}} with 5 columns
+\format{
+\code{\link[data.table]{data.table}} with 5 columns:
 \describe{
 \item{Sample}{Sample anme}
 \item{Chromosome}{Chromosome name}
 \item{Start}{Segment start}
 \item{End}{Segment end}
 \item{LogRatio}{Log ratios for this segment}
-}}
+}
+}
 \usage{
 seg.cna
 }
@@ -22,4 +24,3 @@ Segmented CNA simulated data used by RUBIC example.
   seg.cna
 }
 \keyword{datasets}
-

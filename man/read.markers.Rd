@@ -17,4 +17,3 @@ A \code{data.table} containing the markers.
 \description{
 Read the markers file in TSV format.
 }
-

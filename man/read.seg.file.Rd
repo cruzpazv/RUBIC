@@ -4,8 +4,15 @@
 \alias{read.seg.file}
 \title{Read the segmented CNA file in TSV format.}
 \usage{
-read.seg.file(seg.file, sample = 1, chromosome = 2, start = 3, end = 4,
-  log.ratio = 6, header = T)
+read.seg.file(
+  seg.file,
+  sample = 1,
+  chromosome = 2,
+  start = 3,
+  end = 4,
+  log.ratio = 6,
+  header = T
+)
 }
 \arguments{
 \item{seg.file}{The name of the file containig the segmented CNA.}
@@ -28,4 +35,3 @@ A \code{data.table} containing the segmented CNA.
 \description{
 Read the segmented CNA file in TSV format.
 }
-

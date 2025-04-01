@@ -4,12 +4,14 @@
 \name{markers}
 \alias{markers}
 \title{Markers locations}
-\format{\code{\link[data.table]{data.table}} with 3 columns
+\format{
+\code{\link[data.table]{data.table}} with 3 columns:
 \describe{
 \item{Name}{Probe name}
 \item{Chromosome}{Chromosome name}
 \item{Position}{Probe position on the chromosome}
-}}
+}
+}
 \usage{
 markers
 }
@@ -24,4 +26,3 @@ associated with a bin and the center genomic position of the bin.
   markers
 }
 \keyword{datasets}
-
