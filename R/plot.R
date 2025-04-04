@@ -256,50 +256,46 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     if(!is.null(amp.profile) && !is.null(del.profile)) {
       if (NROW(amp.profile) > 0) {
         amp.profile[,Position := as.numeric(Position)]
-        amp.profile[,Position := .SD[,Position]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'Position')]
+        amp.profile[, Position := Position + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "Position")]
         min.x <- suppressWarnings(min(min.x, amp.profile[,min(Position)]))
         max.x <- suppressWarnings(max(max.x, amp.profile[,max(Position)]))
       }
       if (NROW(segments.p) > 0) {
-        segments.p[,Start := .SD[,Start]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
-        segments.p[,End := .SD[,End]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+        segments.p[, Start := Start + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "Start")]
+        segments.p[, End := End + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "End")]
         min.x <- suppressWarnings(min(min.x, segments.p[,min(Start)]))
         max.x <- suppressWarnings(max(max.x, segments.p[,max(End)]))
       }
       if (NROW(focal.p) > 0) {
         focal.p[,Start := as.numeric(Start)]
-        focal.p[,Start := .SD[,Start]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
+        focal.p[,Start := Start +offset.table[.SD, max, on= 'Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
         focal.p[,End := as.numeric(End)]
-        focal.p[,End := .SD[,End]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+        focal.p[,End := End +offset.table[.SD, max, on ='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
         min.x <- suppressWarnings(min(min.x, focal.p[,min(Start)]))
         max.x <- suppressWarnings(max(max.x, focal.p[,max(End)]))
       }
       
       if (NROW(del.profile) > 0) {
         del.profile[,Position := as.numeric(Position)]
-        del.profile[,Position := .SD[,Position]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'Position')]
+        del.profile[,Position := Position +offset.table[.SD, max, on ='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Position')]
         min.x <- suppressWarnings(min(min.x, del.profile[,min(Position)]))
         max.x <- suppressWarnings(max(max.x, del.profile[,max(Position)]))
-        
       }
       if (NROW(segments.n) > 0) {
-        segments.n[,Start := .SD[,Start]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
-        segments.n[,End := .SD[,End]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+        segments.n[,Start := Start+offset.table[.SD, max, on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
+        segments.n[,End := End+offset.table[.SD, max, on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
         min.x <- suppressWarnings(min(min.x, segments.n[,min(Start)]))
         max.x <- suppressWarnings(max(max.x, segments.n[,max(End)]))
-        
       }
       if (NROW(focal.n) > 0) {
         focal.n[,Start := as.numeric(Start)]
-        focal.n[,Start := .SD[,Start]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
+        focal.n[,Start := Start+offset.table[.SD, max, on = 'Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
         focal.n[,End := as.numeric(End)]
-        focal.n[,End := .SD[,End]+offset.table[.(.SD[,'Chromosome']),'max',mult='first',with=FALSE][,max], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+        focal.n[,End := End+offset.table[.SD,max , on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
         min.x <- suppressWarnings(min(min.x, focal.n[,min(Start)]))
         max.x <- suppressWarnings(max(max.x, focal.n[,max(End)]))
-        
       }
     }  
-    
   }
   
   main.plot <- ggplot(NULL, aes(x=Position, y=LogRatio))
@@ -318,7 +314,7 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     }
     
   } else {
-    main.plot <- main.plot + geom_hline(aes(yintercept=0), size=.2, color='grey', linetype="dashed") +
+    main.plot <- main.plot + geom_hline(aes(yintercept=0), linewidth=.2, color='grey', linetype="dashed") +
       scale_y_continuous(name='Aggregate log ratios')
     rect.min.y <- -Inf
     rect.max.y <- +Inf
@@ -476,7 +472,7 @@ generate.all.plots <- function(dir,
   offset.table[, max := cumsum(max)]
   
   # Whole genome ALL
-  all_file <- file.path(dir, paste0('genome_all.', extension))
+  all_file <- file.path(dir, paste0('chromosome_all_all.', extension))
   png(all_file, width = width, height = height, units = "in", res = 300)
   plot.cna(amp.profile = a.prof,
            del.profile = d.prof,
@@ -489,7 +485,7 @@ generate.all.plots <- function(dir,
   dev.off()
   
   # Whole genome GAINS
-  gains_file <- file.path(dir, paste0('genome_gains.', extension))
+  gains_file <- file.path(dir, paste0('chromosome_all_gains.', extension))
   png(gains_file, width = width, height = height, units = "in", res = 300)
   plot.cna(amp.profile = a.prof,
            segments.p = segs.p,
@@ -499,7 +495,7 @@ generate.all.plots <- function(dir,
   dev.off()
   
   # Whole genome LOSSES
-  losses_file <- file.path(dir, paste0('genome_losses.', extension))
+  losses_file <- file.path(dir, paste0('chromosome_all_losses.', extension))
   png(losses_file, width = width, height = height, units = "in", res = 300)
   plot.cna(del.profile = d.prof,
            segments.n = segs.n,
