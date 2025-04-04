@@ -1,4 +1,10 @@
-# RUBIC v1.0.4#
+# RUBIC v1.1.1#
+
+# Modifications compare with the NKI repository:
+
+- Percentile of segment and -log10(pValue) of breaks in the output.
+- Fixed error exporting plots and added more extension types.
+
 ## What is RUBIC? ##
 RUBIC is an R package.
 

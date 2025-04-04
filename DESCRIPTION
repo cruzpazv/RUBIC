@@ -2,7 +2,7 @@ Package: RUBIC
 Type: Package
 Title: Recurrent DNA copy number break detection to identify driver
         aberrations
-Version: 1.1.0
+Version: 1.1.1
 Date: 2025-04-01
 Author: Ewald van Dyk (NKI), Nicola Bonzanni (eNPicom), Alvise Trevisan
     (eNPicom)
