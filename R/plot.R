@@ -237,148 +237,148 @@ plot.cna <- function(amp.profile=NULL, del.profile=NULL,
     max.x <- suppressWarnings(max(max.x, focal.n[,max(End)]))
   }
   
-  if (is.infinite(min.x) || is.infinite(max.x))
-    stop('There is no data to plot.')
-  
-  if (NROW(genes) > 0) {
-    if (!is.null(chromosome)) {
-      genes <- genes[Chromosome==chromosome]
+  if (!is.infinite(min.x) && !is.infinite(max.x)) {
+    
+    if (NROW(genes) > 0) {
+      if (!is.null(chromosome)) {
+        genes <- genes[Chromosome==chromosome]
+      }
+      min.x <- suppressWarnings(min(min.x, genes[,min(Start)]))
+      max.x <- suppressWarnings(max(max.x, genes[,max(End)]))
     }
-    min.x <- suppressWarnings(min(min.x, genes[,min(Start)]))
-    max.x <- suppressWarnings(max(max.x, genes[,max(End)]))
-  }
-  
-  if (NROW(genes) > 0) {
-    top.plot <- plot.genes.bar(genes, min.x, max.x, focal.p, focal.n)
-  }
-  
-  if (is.null(chromosome)){ 
-    if(!is.null(amp.profile) && !is.null(del.profile)) {
-      if (NROW(amp.profile) > 0) {
-        amp.profile[,Position := as.numeric(Position)]
-        amp.profile[, Position := Position + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "Position")]
-        min.x <- suppressWarnings(min(min.x, amp.profile[,min(Position)]))
-        max.x <- suppressWarnings(max(max.x, amp.profile[,max(Position)]))
-      }
-      if (NROW(segments.p) > 0) {
-        segments.p[, Start := Start + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "Start")]
-        segments.p[, End := End + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "End")]
-        min.x <- suppressWarnings(min(min.x, segments.p[,min(Start)]))
-        max.x <- suppressWarnings(max(max.x, segments.p[,max(End)]))
-      }
-      if (NROW(focal.p) > 0) {
-        focal.p[,Start := as.numeric(Start)]
-        focal.p[,Start := Start +offset.table[.SD, max, on= 'Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
-        focal.p[,End := as.numeric(End)]
-        focal.p[,End := End +offset.table[.SD, max, on ='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
-        min.x <- suppressWarnings(min(min.x, focal.p[,min(Start)]))
-        max.x <- suppressWarnings(max(max.x, focal.p[,max(End)]))
+    
+    if (NROW(genes) > 0) {
+      top.plot <- plot.genes.bar(genes, min.x, max.x, focal.p, focal.n)
+    }
+    
+    if (is.null(chromosome)){ 
+      if(!is.null(amp.profile) && !is.null(del.profile)) {
+        if (NROW(amp.profile) > 0) {
+          amp.profile[,Position := as.numeric(Position)]
+          amp.profile[, Position := Position + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "Position")]
+          min.x <- suppressWarnings(min(min.x, amp.profile[,min(Position)]))
+          max.x <- suppressWarnings(max(max.x, amp.profile[,max(Position)]))
+        }
+        if (NROW(segments.p) > 0) {
+          segments.p[, Start := Start + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "Start")]
+          segments.p[, End := End + offset.table[.SD, max, on = "Chromosome"], by = Chromosome, .SDcols = c("Chromosome", "End")]
+          min.x <- suppressWarnings(min(min.x, segments.p[,min(Start)]))
+          max.x <- suppressWarnings(max(max.x, segments.p[,max(End)]))
+        }
+        if (NROW(focal.p) > 0) {
+          focal.p[,Start := as.numeric(Start)]
+          focal.p[,Start := Start +offset.table[.SD, max, on= 'Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
+          focal.p[,End := as.numeric(End)]
+          focal.p[,End := End +offset.table[.SD, max, on ='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+          min.x <- suppressWarnings(min(min.x, focal.p[,min(Start)]))
+          max.x <- suppressWarnings(max(max.x, focal.p[,max(End)]))
+        }
+        
+        if (NROW(del.profile) > 0) {
+          del.profile[,Position := as.numeric(Position)]
+          del.profile[,Position := Position +offset.table[.SD, max, on ='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Position')]
+          min.x <- suppressWarnings(min(min.x, del.profile[,min(Position)]))
+          max.x <- suppressWarnings(max(max.x, del.profile[,max(Position)]))
+        }
+        if (NROW(segments.n) > 0) {
+          segments.n[,Start := Start+offset.table[.SD, max, on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
+          segments.n[,End := End+offset.table[.SD, max, on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+          min.x <- suppressWarnings(min(min.x, segments.n[,min(Start)]))
+          max.x <- suppressWarnings(max(max.x, segments.n[,max(End)]))
+        }
+        if (NROW(focal.n) > 0) {
+          focal.n[,Start := as.numeric(Start)]
+          focal.n[,Start := Start+offset.table[.SD, max, on = 'Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
+          focal.n[,End := as.numeric(End)]
+          focal.n[,End := End+offset.table[.SD,max , on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
+          min.x <- suppressWarnings(min(min.x, focal.n[,min(Start)]))
+          max.x <- suppressWarnings(max(max.x, focal.n[,max(End)]))
+        }
+      }  
+    }
+    
+    main.plot <- ggplot(NULL, aes(x=Position, y=LogRatio))
+    
+    if(NROW(amp.profile) > 0)
+      main.plot <- main.plot + geom_point(data=amp.profile, color='#d6a9a9')
+    if(NROW(del.profile))
+      main.plot <- main.plot + geom_point(data=del.profile, color='#a9a9d6')
+    
+    if ((NROW(del.profile) == 0 && NROW(segments.n) == 0 && NROW(focal.n) == 0) ||
+        (NROW(amp.profile) == 0 && NROW(segments.p) == 0 && NROW(focal.p) == 0)) {
+      rect.min.y <- 0
+      rect.max.y <- +Inf
+      if (NROW(amp.profile) == 0) {
+        main.plot <- main.plot + scale_y_reverse(name='Aggregate log ratios')
       }
       
-      if (NROW(del.profile) > 0) {
-        del.profile[,Position := as.numeric(Position)]
-        del.profile[,Position := Position +offset.table[.SD, max, on ='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Position')]
-        min.x <- suppressWarnings(min(min.x, del.profile[,min(Position)]))
-        max.x <- suppressWarnings(max(max.x, del.profile[,max(Position)]))
-      }
-      if (NROW(segments.n) > 0) {
-        segments.n[,Start := Start+offset.table[.SD, max, on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
-        segments.n[,End := End+offset.table[.SD, max, on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
-        min.x <- suppressWarnings(min(min.x, segments.n[,min(Start)]))
-        max.x <- suppressWarnings(max(max.x, segments.n[,max(End)]))
-      }
-      if (NROW(focal.n) > 0) {
-        focal.n[,Start := as.numeric(Start)]
-        focal.n[,Start := Start+offset.table[.SD, max, on = 'Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'Start')]
-        focal.n[,End := as.numeric(End)]
-        focal.n[,End := End+offset.table[.SD,max , on='Chromosome'], by=Chromosome, .SDcols=c('Chromosome', 'End')]
-        min.x <- suppressWarnings(min(min.x, focal.n[,min(Start)]))
-        max.x <- suppressWarnings(max(max.x, focal.n[,max(End)]))
-      }
-    }  
-  }
-  
-  main.plot <- ggplot(NULL, aes(x=Position, y=LogRatio))
-  
-  if(NROW(amp.profile) > 0)
-    main.plot <- main.plot + geom_point(data=amp.profile, color='#d6a9a9')
-  if(NROW(del.profile))
-    main.plot <- main.plot + geom_point(data=del.profile, color='#a9a9d6')
-  
-  if ((NROW(del.profile) == 0 && NROW(segments.n) == 0 && NROW(focal.n) == 0) ||
-      (NROW(amp.profile) == 0 && NROW(segments.p) == 0 && NROW(focal.p) == 0)) {
-    rect.min.y <- 0
-    rect.max.y <- +Inf
-    if (NROW(amp.profile) == 0) {
-      main.plot <- main.plot + scale_y_reverse(name='Aggregate log ratios')
-    }
-    
-  } else {
-    main.plot <- main.plot + geom_hline(aes(yintercept=0), linewidth=.2, color='grey', linetype="dashed") +
-      scale_y_continuous(name='Aggregate log ratios')
-    rect.min.y <- -Inf
-    rect.max.y <- +Inf
-  }
-  
-  if(NROW(focal.p) > 0)
-    main.plot <- main.plot + geom_rect(data=focal.p, aes(xmin=Start, xmax=End), ymin=rect.min.y, ymax=rect.max.y, alpha=.2, size=NA, fill='red', inherit.aes=F)
-  if(NROW(focal.n) > 0)
-    main.plot <- main.plot + geom_rect(data=focal.n, aes(xmin=Start, xmax=End), ymin=rect.min.y, ymax=rect.max.y, alpha=.2, size=NA, fill='blue', inherit.aes=F)
-  if(NROW(segments.p) > 0) {
-    if (steps) {
-      setkey(segments.p, End)
-      main.plot <- main.plot +
-        # Add one extra row to the data.table that contain the end of the segment
-        # as its start in order to complete the last step of the ladder.
-        # It assumes that the last row is the the last segment
-        geom_step(data=rbind(segments.p,
-                             segments.p[NROW(segments.p),
-                                        modifyList(.SD, list(Start=End))]),
-                  aes(x=Start, y=Mu), size=.6, color='red')
-    }else{
-      main.plot <- main.plot + geom_segment(data=segments.p, aes(x=Start, y=Mu, xend=End, yend=Mu), size=.6, color='red')
-    }
-  }
-  if(NROW(segments.n) > 0) {
-    if (steps) {
-      setkey(segments.n, End)
-      main.plot <- main.plot +
-        # Add one extra row to the data.table that contain the end of the segment
-        # as its start in order to complete the last step of the ladder.
-        # It assumes that the last row is the the last segment
-        geom_step(data=rbind(segments.n,
-                             segments.n[NROW(segments.n),
-                                        modifyList(.SD, list(Start=End))]),
-                  aes(x=Start, y=Mu), size=.6, color='blue')
     } else {
-      main.plot <- main.plot + geom_segment(data=segments.n, aes(x=Start, y=Mu, xend=End, yend=Mu), size=.6, color='blue')
+      main.plot <- main.plot + geom_hline(aes(yintercept=0), linewidth=.2, color='grey', linetype="dashed") +
+        scale_y_continuous(name='Aggregate log ratios')
+      rect.min.y <- -Inf
+      rect.max.y <- +Inf
     }
-  }
-  
-  if (is.null(chromosome)) {
-    main.plot <- main.plot + geom_vline(xintercept=offset.table[,max][-c(1)])
-  }  
-  
-  main.plot <- main.plot + scale_x_continuous(labels=location.format, limits=c(min.x, max.x), expand=c(0, 0)) +
-    theme(panel.background=element_blank(),
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
-          axis.text=element_text(color='black'),
-          axis.ticks=element_line(color='black'),
-          axis.title.x=element_blank()
-    )
-  
-  main.grob <- ggplotGrob(main.plot)
-  
-  if (NROW(genes) > 0) {
     
-    top.grob <- ggplotGrob(top.plot)
-    main.grob <- gtable_add_rows(main.grob, unit(.025, "npc"), 1)
-    main.grob <- gtable_add_grob(main.grob, top.grob$grobs[[which(top.grob$layout$name == "panel")]], 2, 4, 2, 4)
+    if(NROW(focal.p) > 0)
+      main.plot <- main.plot + geom_rect(data=focal.p, aes(xmin=Start, xmax=End), ymin=rect.min.y, ymax=rect.max.y, alpha=.2, size=NA, fill='red', inherit.aes=F)
+    if(NROW(focal.n) > 0)
+      main.plot <- main.plot + geom_rect(data=focal.n, aes(xmin=Start, xmax=End), ymin=rect.min.y, ymax=rect.max.y, alpha=.2, size=NA, fill='blue', inherit.aes=F)
+    if(NROW(segments.p) > 0) {
+      if (steps) {
+        setkey(segments.p, End)
+        main.plot <- main.plot +
+          # Add one extra row to the data.table that contain the end of the segment
+          # as its start in order to complete the last step of the ladder.
+          # It assumes that the last row is the the last segment
+          geom_step(data=rbind(segments.p,
+                               segments.p[NROW(segments.p),
+                                          modifyList(.SD, list(Start=End))]),
+                    aes(x=Start, y=Mu), size=.6, color='red')
+      }else{
+        main.plot <- main.plot + geom_segment(data=segments.p, aes(x=Start, y=Mu, xend=End, yend=Mu), size=.6, color='red')
+      }
+    }
+    if(NROW(segments.n) > 0) {
+      if (steps) {
+        setkey(segments.n, End)
+        main.plot <- main.plot +
+          # Add one extra row to the data.table that contain the end of the segment
+          # as its start in order to complete the last step of the ladder.
+          # It assumes that the last row is the the last segment
+          geom_step(data=rbind(segments.n,
+                               segments.n[NROW(segments.n),
+                                          modifyList(.SD, list(Start=End))]),
+                    aes(x=Start, y=Mu), size=.6, color='blue')
+      } else {
+        main.plot <- main.plot + geom_segment(data=segments.n, aes(x=Start, y=Mu, xend=End, yend=Mu), size=.6, color='blue')
+      }
+    }
+    
+    if (is.null(chromosome)) {
+      main.plot <- main.plot + geom_vline(xintercept=offset.table[,max][-c(1)])
+    }  
+    
+    main.plot <- main.plot + scale_x_continuous(labels=location.format, limits=c(min.x, max.x), expand=c(0, 0)) +
+      theme(panel.background=element_blank(),
+            panel.grid.major=element_blank(),
+            panel.grid.minor=element_blank(),
+            axis.text=element_text(color='black'),
+            axis.ticks=element_line(color='black'),
+            axis.title.x=element_blank()
+      )
+    
+    main.grob <- ggplotGrob(main.plot)
+    
+    if (NROW(genes) > 0) {
+      
+      top.grob <- ggplotGrob(top.plot)
+      main.grob <- gtable_add_rows(main.grob, unit(.025, "npc"), 1)
+      main.grob <- gtable_add_grob(main.grob, top.grob$grobs[[which(top.grob$layout$name == "panel")]], 2, 4, 2, 4)
+    }
+    
+    grid.newpage()
+    grid.draw(main.grob)
   }
-  
-  grid.newpage()
-  grid.draw(main.grob)
 }
 
 #' @export
