@@ -1,9 +1,10 @@
-# RUBIC v1.1.1#
+# RUBIC v1.1.0#
 
 # Modifications compare with the NKI repository:
 
 - Percentile of segment and -log10(pValue) of breaks in the output.
 - Fixed error exporting plots and added more extension types.
+- ENSEMBL ids of the gene included in the output.
 
 ## What is RUBIC? ##
 RUBIC is an R package.
