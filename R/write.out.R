@@ -29,13 +29,14 @@ focal.events.to.tsv <- function(focal.events, file.name='') {
       formatC(event$l$q, format="e", digits=5),
       formatC(event$r$q, format="e", digits=5),
       paste0(event$gene.symbols, collapse=","),
+      paste0(event$ensembl.id, collapse=","),
       sep='\t'
     )
   }, character(1))
   lines <- c(paste('Chromosome', 'Start', 'End', 'Percentile_pValue',
                    'Left_break_-log10pValue', 'Right_break_-log10pValue',
                    'Left_break_-log10qValue', 'Right_break_-log10qValue',
-                   'Gene symb', sep='\t'),
+                   'Gene_symb', 'Ensembl_id', sep='\t'),
              lines)
   writeLines(lines, con=fd, sep='\n')
   flush(fd)
