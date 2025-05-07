@@ -125,18 +125,6 @@ segments.at.fdr.abs <- function(cna.matrix, map.loc.agr, amp.level, del.level, s
   c(analytical.to.perm.p(modules, break.info, sig.mods), e=e)
 }
 
-#' Aggregate positive and negative segments
-#'
-#' @param cna.matrix Copy number matrix
-#' @param map.loc.agr Aggregated map locations
-#' @param amp.level Amplification threshold
-#' @param del.level Deletion threshold
-#' @param params.p Positive parameters
-#' @param params.n Negative parameters
-#' @param fdr False discovery rate
-#' @param samps.use Samples to use
-#' @return List containing positive and negative segments
-#' @export
 aggregate.segments <- function(cna.matrix, map.loc.agr, amp.level, del.level, params.p, params.n, fdr, samps.use=vector('numeric')) {
 
   segments.p <- segments.at.fdr.abs(cna.matrix, map.loc.agr, amp.level, del.level, samps.use, params.p, fdr, +1)
